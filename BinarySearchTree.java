@@ -28,9 +28,9 @@ public class BinarySearchTree {
 	    return root;
 	}
 	if (key < root.key) {
-	    recursiveSearch(root.left, key);
+	    return recursiveSearch(root.left, key);
 	} else {
-	    recursiveSearch(root.right, key);
+	    return recursiveSearch(root.right, key);
 	}
     }
 
