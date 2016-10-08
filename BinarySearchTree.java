@@ -10,20 +10,20 @@
  **/
 
 public class BinarySearchTree {
-    public class Tree {
+    public class Node {
 	int key;
-	Tree left;
-	Tree right;
-	Tree parent;
+	Node left;
+	Node right;
+	Node parent;
 
-	public Tree(int key) {
+	public Node(int key) {
 	    this.key = key;
-	    left = null;
-	    right = null;
+	    this.left = null;
+	    this.right = null;
 	}
     }
 
-    public Tree recursiveSearch(Tree root, int key) {
+    public Node recursiveSearch(Node root, int key) {
 	if (root == null || root.key == key) {
 	    return root;
 	}
@@ -34,7 +34,7 @@ public class BinarySearchTree {
 	}
     }
 
-    public Tree iterativeSearch(Tree root, int key) {
+    public Node iterativeSearch(Node root, int key) {
 	while (root != null && root.key != key) {
 	    if (key < root.key) {
 		root = root.left;
@@ -45,7 +45,7 @@ public class BinarySearchTree {
 	return root;
     }
 
-    public Tree minimum(Tree root) {
+    public Node minimum(Node root) {
 	if (root == null) {
 	    return null;
 	}
@@ -55,7 +55,7 @@ public class BinarySearchTree {
 	return root;
     }
 
-    public Tree maximum(Tree root) {
+    public Node maximum(Node root) {
 	if (root == null) {
 	    return null;
 	}
@@ -65,14 +65,14 @@ public class BinarySearchTree {
 	return root;
     }
     
-    public Tree successor(Tree root) {
+    public Node successor(Node root) {
 	if (root == null) {
 	    return null;
 	}
 	if (root.right != null) {
 	    return minimum(root.right);
 	}
-	Tree parent = root.parent;
+	Node parent = root.parent;
 	while (parent != null && root == parent.right) {
 	    root = parent;
 	    parent = root.parent;
@@ -80,18 +80,20 @@ public class BinarySearchTree {
 	return parent;
     }
 
-    public Tree predecessor(Tree root) {
+    public Node predecessor(Node root) {
 	if (root == null) {
 	    return null;
 	}
 	if (root.left != null) {
 	    return maximum(root.left);
 	}
-	Tree parent = root.parent;
+	Node parent = root.parent;
 	while (parent != null && root == parent.left) {
 	    root = parent;
 	    parent = root.parent;
 	}
 	return parent;
     }
+
+
 }
