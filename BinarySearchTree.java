@@ -1,12 +1,16 @@
 /**
- * Implemented methods:
+ * Implemented methods: 
+ * 
  * recursiveSearch
  * iterativeSearch
  * minimum
  * maxmum
  * successor
  * predecessor
+ * insert
+ * delete
  *
+ * All these methods run in O(h) where h is the height of Tree
  **/
 
 public class BinarySearchTree {
@@ -95,5 +99,60 @@ public class BinarySearchTree {
 	return parent;
     }
 
+    public Node insert(Node root, Node node) {
+	Node p = null;
+	Node x = root;
+	while (root != null) {
+	    p = x;
+	    if (node.key < x.key) {
+		x = x.left;
+	    } else {
+		x = x.right;
+	    }
+	}
+	node.parent = p;
+	if (p == null) {
+	    //Tree was empty
+	    root = node;
+	} else if (node.key < p.key) {
+	    p.left = node;
+	} else {
+	    p.right = node;
+	}
+	return root;
+    }
+
+    private Node transplant(Node root, Node u, Node v) {
+	if (u.parent == null) {
+	    root = v;
+	} else if (u == u.parent.left) {
+	    u.parent.left = v;
+	} else {
+	    u.parent.right = v;
+	}
+
+	if (v != null) {
+	    v.parent = u.parent;
+	}
+	return root;
+    }
+    public Node delete(Node root, Node node) {
+	if (node.left == null) {
+	    return transplant(root, node, node.right);
+	} else if (node.right == null) {
+	    return transplant(root, node, node.left);
+	} else {
+	    Node suc = minimum(node.right);
+	    if (suc.parent != node) {
+		transplant(root, suc, suc.right);
+		suc.right = node.right;
+		suc.right.parent = suc;
+	    }
+	    transplant(root, node, suc);
+	    suc.left = node.left;
+	    suc.left.parent = suc;
+	    return root;
+	}
+    }
 
 }
