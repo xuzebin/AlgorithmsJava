@@ -24,9 +24,16 @@ public class BinarySearchTree {
 	    this.key = key;
 	    this.left = null;
 	    this.right = null;
+	    this.parent = null;
 	}
     }
 
+    private Node root;
+
+    public BinarySearchTree() {
+	this.root = null;
+    }
+     
     public Node recursiveSearch(Node root, int key) {
 	if (root == null || root.key == key) {
 	    return root;
