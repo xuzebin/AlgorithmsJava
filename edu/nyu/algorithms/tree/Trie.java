@@ -13,16 +13,6 @@ import java.util.*;
 
 public class Trie {
 
-    private class TrieNode {
-	Map<Character, TrieNode> children;
-	boolean end;
-	public TrieNode() {	
-	    this.children = new HashMap<>();
-	    this.end = false;
-	}
-    }
-
-    
     private final TrieNode root;
 
     public Trie() {
@@ -198,6 +188,7 @@ public class Trie {
 
     public static void main(String[] args) {
 	Trie trie = new Trie();
+
 	//iterative insert, insertPrefix, search tests
 	System.out.println("iterative methods:");
 	System.out.println("insert: abc, abck, omg, american");
