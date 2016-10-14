@@ -3,6 +3,7 @@
  *
  **/
 package edu.nyu.algorithms;
+
 import java.util.Arrays;
 
 public class Heap {
@@ -11,13 +12,13 @@ public class Heap {
 	    };
 
     public int getParent(int index) {
-	return (index - 1) / 2;
+	return (index - 1) >> 1;
     }
     public int getLeftChild(int index) {
-	return 2 * index + 1;
+	return (index << 1) + 1;
     }
     public int getRightChild(int index) {
-	return 2 * index + 2;
+	return (index << 1) + 2;
     }
     public void heapify(int[] heapArray, int heapSize, int i, HeapType type) {
 	int left = getLeftChild(i);
@@ -39,12 +40,14 @@ public class Heap {
 	heapify(heapArray, heapArray.length, i, type);
     }
     private boolean compare(int one, int another, HeapType type) {
-	if (type == HeapType.MIN) {
+	switch(type) {
+	case MIN:
 	    return one < another;
-	} else if (type == HeapType.MAX) {
+	case MAX:
 	    return one > another;
+	default:
+	    throw new IllegalArgumentException(String.format("Unrecognized HeapType %s", type.name()));
 	}
-	throw new IllegalArgumentException("HeapType error");
     }
     private void swap(int[] heapArray, int i, int largest) {
 	final int temp = heapArray[i];
