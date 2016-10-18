@@ -10,9 +10,16 @@
  * insert
  * delete
  *
- * All these methods run in O(h) where h is the height of Tree
+ * All the above methods run in O(h) where h is the height of Tree
+ *
+ * preorder
+ * inorder
+ * postorder
+ *
  **/
 package edu.nyu.algorithms.tree;
+
+import java.util.*;
 
 public class BinarySearchTree {
 
@@ -21,8 +28,12 @@ public class BinarySearchTree {
     public BinarySearchTree() {
 	this.root = null;
     }
-     
-    public BinaryNode recursiveSearch(BinaryNode root, int key) {
+
+    public BinaryNode recursiveSearch(int key) {
+	return recursiveSearch(root, key);
+    }
+					      
+    private BinaryNode recursiveSearch(BinaryNode root, int key) {
 	if (root == null || root.key == key) {
 	    return root;
 	}
@@ -33,7 +44,11 @@ public class BinarySearchTree {
 	}
     }
 
-    public BinaryNode iterativeSearch(BinaryNode root, int key) {
+    public BinaryNode iterativeSearch(int key) {
+	return iterativeSearch(root, key);
+    }
+
+    private BinaryNode iterativeSearch(BinaryNode root, int key) {
 	while (root != null && root.key != key) {
 	    if (key < root.key) {
 		root = root.left;
@@ -44,6 +59,9 @@ public class BinarySearchTree {
 	return root;
     }
 
+    public BinaryNode minimum() {
+	return minimum(root);
+    }
     public BinaryNode minimum(BinaryNode root) {
 	if (root == null) {
 	    return null;
@@ -53,7 +71,10 @@ public class BinarySearchTree {
 	}
 	return root;
     }
-
+    public BinaryNode maximum() {
+	return maximum(root);
+    }
+				
     public BinaryNode maximum(BinaryNode root) {
 	if (root == null) {
 	    return null;
@@ -93,31 +114,31 @@ public class BinarySearchTree {
 	}
 	return parent;
     }
-
-    public BinaryNode insert(BinaryNode root, BinaryNode node) {
+    public void insert(BinaryNode node) {
+	if (node == null) {
+	    return;
+	}
 	BinaryNode p = null;
 	BinaryNode x = root;
-	while (root != null) {
+	while (x != null) {
 	    p = x;
-	    if (node.key < x.key) {
-		x = x.left;
-	    } else {
-		x = x.right;
-	    }
+	    x = node.key < x.key ? x.left : x.right;
 	}
 	node.parent = p;
 	if (p == null) {
-	    //Tree was empty
+	    //Tree was empty, now the inserted node becomes root of tree.
+	    System.out.printf("Tree was empty. Node %d inserted.%n", node.key);
 	    root = node;
 	} else if (node.key < p.key) {
+	    System.out.printf("Node %d inserted in the left tree.%n", node.key);
 	    p.left = node;
 	} else {
+	    System.out.printf("Node %d inserted in the right tree.%n", node.key);
 	    p.right = node;
 	}
-	return root;
     }
 
-    private BinaryNode transplant(BinaryNode root, BinaryNode u, BinaryNode v) {
+    private void transplant(BinaryNode root, BinaryNode u, BinaryNode v) {
 	if (u.parent == null) {
 	    root = v;
 	} else if (u == u.parent.left) {
@@ -129,13 +150,16 @@ public class BinarySearchTree {
 	if (v != null) {
 	    v.parent = u.parent;
 	}
-	return root;
     }
-    public BinaryNode delete(BinaryNode root, BinaryNode node) {
+    public void delete(BinaryNode node) {
+	delete(root, node);
+    }
+
+    public void delete(BinaryNode root, BinaryNode node) {
 	if (node.left == null) {
-	    return transplant(root, node, node.right);
+	    transplant(root, node, node.right);
 	} else if (node.right == null) {
-	    return transplant(root, node, node.left);
+	    transplant(root, node, node.left);
 	} else {
 	    BinaryNode suc = minimum(node.right);
 	    if (suc.parent != node) {
@@ -146,8 +170,71 @@ public class BinarySearchTree {
 	    transplant(root, node, suc);
 	    suc.left = node.left;
 	    suc.left.parent = suc;
-	    return root;
 	}
     }
 
+    public void preorderDFS() {
+	System.out.print("preorder: ");
+	preorderDFS(root);
+	System.out.println();
+    }
+    public void inorderDFS() {
+	System.out.print("inorder: ");
+	inorderDFS(root);
+	System.out.println();
+    }
+    public void postorderDFS() {
+	System.out.print("postorder: ");
+	postorderDFS(root);
+	System.out.println();
+    }
+
+    public void preorderDFS(BinaryNode root) {
+	if (root == null) {
+	    return;
+	}
+	System.out.printf("%d ", root.key);
+	preorderDFS(root.left);
+	preorderDFS(root.right);
+    }
+    
+    public void inorderDFS(BinaryNode root) {
+	if (root == null) {
+	    return;
+	}
+	inorderDFS(root.left);
+	System.out.printf("%d ", root.key);
+	inorderDFS(root.right);
+    }
+    public void postorderDFS(BinaryNode root) {
+	if (root == null) {
+	    return;
+	}
+	postorderDFS(root.left);
+	postorderDFS(root.right);
+	System.out.printf("%d ", root.key);
+    }
+
+
+    public static void main(String[] args) {
+	BinarySearchTree bst = new BinarySearchTree();
+	
+// 	for (int i = 0; i < 10; ++i) {
+// 	    bst.insert(new BinaryNode(i));
+// 	}
+	bst.insert(new BinaryNode(3));
+	bst.insert(new BinaryNode(5));
+	bst.insert(new BinaryNode(1));
+	bst.insert(new BinaryNode(8));
+	bst.insert(new BinaryNode(7));
+	bst.insert(new BinaryNode(6));
+	bst.insert(new BinaryNode(2));
+	bst.insert(new BinaryNode(0));
+	bst.insert(new BinaryNode(9));
+	bst.insert(new BinaryNode(4));
+
+	bst.preorderDFS();
+	bst.inorderDFS();
+	bst.postorderDFS();
+    }
 }

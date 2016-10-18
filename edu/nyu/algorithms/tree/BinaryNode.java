@@ -5,6 +5,7 @@ public class BinaryNode {
     BinaryNode left;
     BinaryNode right;
     BinaryNode parent;
+    //TODO add some satellite data.
     
     public BinaryNode(int key) {
 	this(key, null, null, null);
