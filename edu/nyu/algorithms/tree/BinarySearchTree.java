@@ -4,7 +4,9 @@
  * recursiveSearch
  * iterativeSearch
  * minimum
- * maxmum
+ * minimumRecursive
+ * maximum
+ * maximumRecursive
  * successor
  * predecessor
  * insert
@@ -71,6 +73,18 @@ public class BinarySearchTree {
 	}
 	return root;
     }
+
+    public BinaryNode minimumRecursive() {
+	return minimumRecursive(root);
+    }
+
+    public BinaryNode minimumRecursive(BinaryNode root) {
+	if (root == null || root.left == null) {
+	    return root;
+	}
+	return minimumRecursive(root.left);
+    }
+
     public BinaryNode maximum() {
 	return maximum(root);
     }
@@ -85,6 +99,16 @@ public class BinarySearchTree {
 	return root;
     }
     
+    public BinaryNode maximumRecursive() {
+	return maximumRecursive(root);
+    }
+    public BinaryNode maximumRecursive(BinaryNode root) {
+	if (root == null || root.right == null) {
+	    return root;
+	}
+	return maximumRecursive(root.right);
+    }
+
     public BinaryNode successor(BinaryNode root) {
 	if (root == null) {
 	    return null;
@@ -236,5 +260,10 @@ public class BinarySearchTree {
 	bst.preorderDFS();
 	bst.inorderDFS();
 	bst.postorderDFS();
+	
+	System.out.printf("maxmimum: %d%n", bst.maximum().key);
+	System.out.printf("minimum: %d%n", bst.minimum().key);
+	System.out.printf("maxmimumRecursive: %d%n", bst.maximumRecursive().key);
+	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive().key);
     }
 }
