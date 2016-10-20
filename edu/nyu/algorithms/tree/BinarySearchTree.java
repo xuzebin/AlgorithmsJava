@@ -11,6 +11,7 @@
  * predecessor
  * insert
  * delete
+ * exist
  *
  * All the above methods run in O(h) where h is the height of Tree
  *
@@ -143,7 +144,7 @@ public class BinarySearchTree {
 	    return;
 	}
 	BinaryNode p = null;
-	BinaryNode x = root;
+	BinaryNode x = this.root;
 	while (x != null) {
 	    p = x;
 	    x = node.key < x.key ? x.left : x.right;
@@ -152,7 +153,7 @@ public class BinarySearchTree {
 	if (p == null) {
 	    //Tree was empty, now the inserted node becomes root of tree.
 	    System.out.printf("Tree was empty. Node %d inserted.%n", node.key);
-	    root = node;
+	    this.root = node;
 	} else if (node.key < p.key) {
 	    System.out.printf("Node %d inserted in the left tree.%n", node.key);
 	    p.left = node;
@@ -162,9 +163,9 @@ public class BinarySearchTree {
 	}
     }
 
-    private void transplant(BinaryNode root, BinaryNode u, BinaryNode v) {
+    private void transplant(BinaryNode u, BinaryNode v) {
 	if (u.parent == null) {
-	    root = v;
+	    this.root = v;
 	} else if (u == u.parent.left) {
 	    u.parent.left = v;
 	} else {
@@ -175,26 +176,32 @@ public class BinarySearchTree {
 	    v.parent = u.parent;
 	}
     }
-    public void delete(BinaryNode node) {
-	delete(root, node);
+    public void delete(int key) {
+	BinaryNode node = iterativeSearch(key);
+	delete(node);
     }
-
-    public void delete(BinaryNode root, BinaryNode node) {
+    private void delete(BinaryNode node) {
+	if (node == null) {
+	    return;
+	}
 	if (node.left == null) {
-	    transplant(root, node, node.right);
+	    transplant(node, node.right);
 	} else if (node.right == null) {
-	    transplant(root, node, node.left);
+	    transplant(node, node.left);
 	} else {
 	    BinaryNode suc = minimum(node.right);
 	    if (suc.parent != node) {
-		transplant(root, suc, suc.right);
+		transplant(suc, suc.right);
 		suc.right = node.right;
 		suc.right.parent = suc;
 	    }
-	    transplant(root, node, suc);
+	    transplant(node, suc);
 	    suc.left = node.left;
 	    suc.left.parent = suc;
 	}
+    }
+    public boolean exist(int key) {
+	return iterativeSearch(key) == null ? false : true;
     }
 
     public void preorderDFS() {
@@ -257,13 +264,27 @@ public class BinarySearchTree {
 	bst.insert(new BinaryNode(9));
 	bst.insert(new BinaryNode(4));
 
+	bst.insert(new BinaryNode(10));
+
 	bst.preorderDFS();
 	bst.inorderDFS();
 	bst.postorderDFS();
+
+	System.out.printf("maxmimum: %d%n", bst.maximum() == null ? -1 : bst.maximum().key);
+	System.out.printf("minimum: %d%n", bst.minimum() == null ? -1 : bst.minimum().key);
+	System.out.printf("maxmimumRecursive: %d%n", bst.maximumRecursive() == null ? -1 : bst.maximumRecursive().key);
+	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive() == null ? -1 : bst.minimumRecursive().key);
+
+
+	bst.delete(10);
 	
-	System.out.printf("maxmimum: %d%n", bst.maximum().key);
-	System.out.printf("minimum: %d%n", bst.minimum().key);
-	System.out.printf("maxmimumRecursive: %d%n", bst.maximumRecursive().key);
-	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive().key);
+	System.out.printf("maxmimum: %d%n", bst.maximum() == null ? -1 : bst.maximum().key);
+	System.out.printf("minimum: %d%n", bst.minimum() == null ? -1 : bst.minimum().key);
+	System.out.printf("maxmimumRecursive: %d%n", bst.maximumRecursive() == null ? -1 : bst.maximumRecursive().key);
+	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive() == null ? -1 : bst.minimumRecursive().key);
+
+
+
+	
     }
 }
