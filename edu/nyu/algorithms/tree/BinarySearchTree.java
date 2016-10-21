@@ -10,8 +10,10 @@
  * successor
  * predecessor
  * insert
- * delete
- * exist
+ * delete1 find successor.
+ * delete2 find predecessor.
+ * delete an optimized method considering tree structure.
+ * exist if a node with the specified key exists
  *
  * All the above methods run in O(h) where h is the height of Tree
  *
@@ -180,7 +182,11 @@ public class BinarySearchTree {
 	BinaryNode node = iterativeSearch(key);
 	delete(node);
     }
-    private void delete(BinaryNode node) {
+
+    /**
+     * Replace the node being deleted with its successor
+     */
+    private void delete1(BinaryNode node) {
 	if (node == null) {
 	    return;
 	}
@@ -189,6 +195,7 @@ public class BinarySearchTree {
 	} else if (node.right == null) {
 	    transplant(node, node.left);
 	} else {
+	    //find the successor
 	    BinaryNode suc = minimum(node.right);
 	    if (suc.parent != node) {
 		transplant(suc, suc.right);
@@ -200,6 +207,62 @@ public class BinarySearchTree {
 	    suc.left.parent = suc;
 	}
     }
+    /**
+     * Replace the node being deleted with its predecessor
+     */
+    private void delete2(BinaryNode node) {
+	if (node == null) {
+	    return;
+	}
+	if (node.left == null) {
+	    transplant(node, node.right);
+	} else if (node.right == null) {
+	    transplant(node, node.left);
+	} else {
+	    //find the predecessor
+	    BinaryNode pre = maximum(node.left);
+	    if (pre.parent != node) {
+		transplant(pre, pre.left);
+		pre.left = node.left;
+		pre.left.parent = pre;
+	    }
+	    transplant(node, pre);
+	    pre.right = node.right;
+	    pre.right.parent = pre;
+	}
+    }
+    /**
+     * A minimal optimized method of deleting a node.
+     */
+    private void delete(BinaryNode node) {
+	if (node == null) {
+	    return;
+	}
+	if (node.left == null) {
+	    transplant(node, node.right);
+	} else if (node.right == null) {
+	    transplant(node, node.left);
+	} else {
+	    //if left child is a leaf node, replace this node with the deleting node.
+	    if (node.left.left == null && node.left.right == null) {
+		BinaryNode leaf = node.left;
+		transplant(node, leaf);
+		leaf.right = node.right;
+		leaf.right.parent = leaf;
+	    } else {//otherwise find the successor
+		BinaryNode suc = minimum(node.right);
+		if (suc.parent != node) {
+		    transplant(suc, suc.right);
+		    suc.right = node.right;
+		    suc.right.parent = suc;
+		}
+		transplant(node, suc);
+		suc.left = node.left;
+		suc.left.parent = suc;
+	    }
+	}
+    }
+
     public boolean exist(int key) {
 	return iterativeSearch(key) == null ? false : true;
     }
@@ -276,7 +339,7 @@ public class BinarySearchTree {
 	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive() == null ? -1 : bst.minimumRecursive().key);
 
 
-	bst.delete(10);
+	bst.delete(4);
 	
 	System.out.printf("maxmimum: %d%n", bst.maximum() == null ? -1 : bst.maximum().key);
 	System.out.printf("minimum: %d%n", bst.minimum() == null ? -1 : bst.minimum().key);
@@ -284,7 +347,7 @@ public class BinarySearchTree {
 	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive() == null ? -1 : bst.minimumRecursive().key);
 
 
-
+	bst.inorderDFS();
 	
     }
 }
