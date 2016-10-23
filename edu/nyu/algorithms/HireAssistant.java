@@ -53,8 +53,9 @@ public class HireAssistant {
     }
     private void shuffle(int[] array) {
 	Random random = new Random();
-	for (int i = 0; i < array.length; ++i) {
-	    int index = random.nextInt(i + 1);
+	int n = array.length;
+	for (int i = 0; i < n; ++i) {
+	    int index = random.nextInt(n - i) + i;
 	    int tmp = array[i];
 	    array[i] = array[index];
 	    array[index] = tmp;
