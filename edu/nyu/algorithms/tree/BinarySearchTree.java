@@ -18,7 +18,8 @@
  * All the above methods run in O(h) where h is the height of Tree
  *
  * preorder
- * inorder
+ * inorder recursive method
+ * inorder2 start from minimum and iteratively calling successor method.
  * postorder
  *
  **/
@@ -277,6 +278,9 @@ public class BinarySearchTree {
 	inorderDFS(root);
 	System.out.println();
     }
+    public void inorderDFS2() {
+	inorderDFS2(root);
+    }
     public void postorderDFS() {
 	System.out.print("postorder: ");
 	postorderDFS(root);
@@ -307,6 +311,20 @@ public class BinarySearchTree {
 	postorderDFS(root.left);
 	postorderDFS(root.right);
 	System.out.printf("%d ", root.key);
+    }
+    //not using recursive algorithms
+    public void inorderDFS2(BinaryNode root) {
+	if (root == null) {
+	    return;
+	}
+	BinaryNode min = minimum(root);
+	System.out.printf("inorder2: %d", min.key);
+	BinaryNode next = successor(min);
+	while (next != null) {
+	    System.out.printf(" %d", next.key);
+	    next = successor(next);
+	}
+	System.out.println();
     }
 
 
@@ -348,6 +366,8 @@ public class BinarySearchTree {
 
 
 	bst.inorderDFS();
+
+	bst.inorderDFS2();
 	
     }
 }
