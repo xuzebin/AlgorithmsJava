@@ -1,5 +1,5 @@
 /**
- * 3 implementaions of calculating nth value of Fibonacci sequence to compare their efficiency.
+ * 4 implementaions of calculating nth value of Fibonacci sequence to compare their efficiency.
  * Fibonacci:
  * fib(0) = 0
  * fib(1) = 1
@@ -8,6 +8,7 @@
  * runIterativeMethod is supposed to be the fastest.
  * runRecursiveMethod is supposed to be the most intuitive but slowest.
  * runMemoizeMethod use an array to memo-ize calculated results to speed up calculation.
+ * runClosedFormMethod directly calculates the ith fibonacci in constant time.
  * 
  * This program takes two arguments to run. 
  * It outputs the nth Fibonnaci value and the running time it takes.
@@ -15,6 +16,7 @@
  * ./Fibonnaci i 10 // calculate 10th Fibonacci value using iterativeMethod 
  * ./Fibonnaci r 10 // calculate 10th Fibonacci value using recursiveMethod 
  * ./Fibonnaci m 10 // calculate 10th Fibonacci value using memoizeMethod
+ * ./Fibonaaci c 10 // using closedFormMethod
  * 
  * Created by Zebin Xu 
  * zebinxu@nyu.edu
@@ -59,7 +61,7 @@ public class Fibonacci {
 
     public long runRecursiveMethod(int n) {
 	if (n < 0) {
-	    throw new RuntimeException("n < 0");
+	    throw new IllegalArgumentException("n < 0");
 	}
 
 	if (n == 0) {
@@ -93,6 +95,15 @@ public class Fibonacci {
 	return dictionary[n];
     }
 
+    public long runClosedFormMethod(int n) {
+	if (n < 0) {
+	    throw new IllegalArgumentException("n < 0");
+	}
+	double sqrtFive = Math.sqrt(5);
+	return (long)((1 / sqrtFive) * (Math.pow((1 + sqrtFive) / 2, n) - Math.pow((1 - sqrtFive) / 2, n)));
+    }
+
+
     private static long handleInput(String[] args, Fibonacci fib) {
 	if (args.length != 2) {
 	    throw new RuntimeException("the number of argument should be 2.");
@@ -114,9 +125,12 @@ public class Fibonacci {
 	case "M":
 	    fibResult = fib.runMemoizeMethod(Integer.parseInt(args[1]));
 	    break;
-	default:
-	    fibResult = 0;
+	case "c":
+	case "C":
+	    fibResult = fib.runClosedFormMethod(Integer.parseInt(args[1]));
 	    break;
+	default:
+	    throw new AssertionError("incorrect argument");
 	}
 	return fibResult;
     }
