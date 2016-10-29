@@ -1,21 +1,19 @@
 package edu.nyu.algorithms.tree;
 
-public class BinaryNode {
-    int key;
-    BinaryNode left;
-    BinaryNode right;
-    BinaryNode parent;
+public class BinaryNode<T> {
 
-    String data;
+    int key;
+    T data;//satellite data
+
+    BinaryNode<T> left;
+    BinaryNode<T> right;
+    BinaryNode<T> parent;
     
     public BinaryNode(int key) {
-	this(key, null, null, null);
+	this(key, null);
     }
-
-    public BinaryNode(int key, BinaryNode left, BinaryNode right, BinaryNode parent) {
+    public BinaryNode(int key, T data) {
 	this.key = key;
-	this.left = left;
-	this.right = right;
-	this.parent = parent;
+	this.data = data;
     }
 }
