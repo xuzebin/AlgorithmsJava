@@ -3,6 +3,7 @@
  * Includes:
  * insertion sort
  * merge sort
+ * quick sort
  */
 package edu.nyu.algorithms;
 
@@ -23,6 +24,7 @@ public class Sorting {
 	}
 
 	int[] arr2 = Arrays.copyOf(arr, arr.length);
+	int[] arr3 = Arrays.copyOf(arr, arr.length);
 	System.out.printf("unsorted: %s%n", Arrays.toString(arr));
 	int steps = s.insertionSort(arr);
 	System.out.printf("insertion sort: %s%n", Arrays.toString(arr));
@@ -32,6 +34,10 @@ public class Sorting {
 	int msteps = s.mergeSort(arr2);
 	System.out.printf("merge sort: %s%n", Arrays.toString(arr2));
 	System.out.printf("steps: %d%n", msteps);
+
+	int qsteps = s.quickSort(arr3);
+	System.out.printf("quick sort: %s%n", Arrays.toString(arr3));
+	System.out.printf("steps: %d%n", qsteps);
 	
     }
 
@@ -108,4 +114,42 @@ public class Sorting {
 	
     }
 
+    private int qsteps = 0;
+
+    public int quickSort(int[] array) {
+	quickSort(array, 0, array.length - 1);
+	return qsteps;
+    }
+
+    private void quickSort(int[] array, int p, int r) {
+	System.out.println(Arrays.toString(array));
+	if (p < r) {
+	    int q = partition(array, p, r);
+	    quickSort(array, p, q - 1);
+	    quickSort(array, q + 1, r);
+	    qsteps += 4;
+	}
+    }
+
+    private int partition(int[] array, int p, int r) {
+	int pivot = array[r];
+	int j = p - 1;
+	for (int i = p; i < r; ++i) {
+	    if (array[i] <= pivot) {
+		++j;
+		int tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+
+		qsteps += 1;
+	    }
+	    qsteps += 1;
+	}
+	
+	qsteps += 1;
+	
+	array[r] = array[j + 1];
+	array[j + 1] = pivot;
+	return j + 1;
+    }
 }
