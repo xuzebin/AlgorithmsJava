@@ -28,6 +28,7 @@
  * find kth smallest node (2 recursive solutions)
  * find kth smallest node (iterative)
  * isValidBST check if the binary tree follows the rules of BST.
+ * isBalanced check if the tree is balanced (depth difference of two subtree of every node is at most 1.
  **/
 package edu.nyu.algorithms.tree;
 
@@ -503,6 +504,25 @@ public class BinarySearchTree<T> {
 	    && valid(node.left, min, node.key) && valid(node.right, node.key, max);
     }
 
+    public boolean isBalanced() {
+	return depth(root) != -1;
+    }
+    private int depth(BinaryNode node) {
+	if (node == null) {
+	    return 0;
+	}
+	int left = depth(node.left);
+	if (left == -1) {
+	    return -1;
+	}
+	int right = depth(node.right);
+	if (right == -1) {
+	    return -1;
+	}
+	return Math.abs(left - right) <= 1 ? Math.max(left, right) + 1 : -1;
+    }
+
+
     public static void main(String[] args) {
 	BinarySearchTree<String> bst = new BinarySearchTree<String>();
 	
@@ -544,8 +564,10 @@ public class BinarySearchTree<T> {
 	bst.postorderIterative();
 
 	boolean valid = bst.isValidBST();
-	System.out.printf("is a valid BST: %b%n", valid);
+	System.out.printf("Is this tree a valid BST: %b%n", valid);
 	
+	boolean balanced = bst.isBalanced();
+	System.out.printf("Is this tree a balanced tree: %b%n", balanced); 
 
 	Scanner in = new Scanner(System.in);
 	System.out.println("find the kth smallest node in the above binary search tree.");
