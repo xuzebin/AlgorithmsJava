@@ -23,7 +23,7 @@
  * inorder2 start from minimum and iteratively calling successor method.
  * postorder
  *
- * find kth smallest node (recursive)
+ * find kth smallest node (2 recursive solutions)
  * find kth smallest node (iterative)
  *
  **/
@@ -386,6 +386,28 @@ public class BinarySearchTree<T> {
 	BinaryNode right = kthSmallest(root.right, k, c);
 	return right;
     }
+
+    //a second recursive method
+    public BinaryNode kthSmallestRecursive2(int k) {
+	return kthSmallestRecursive2(root, k);
+    }
+    private BinaryNode kthSmallestRecursive2(BinaryNode root, int k) {
+	int num = numberOfSubNode(root.left);
+	if (num + 1 == k) {
+	    return root;
+	} else if (num + 1 > k) {
+	    return kthSmallestRecursive2(root.left, k);
+	} else {
+	    return kthSmallestRecursive2(root.right, k - num - 1);
+	}
+    }
+    private int numberOfSubNode(BinaryNode node) {
+	if (node == null) {
+	    return 0;
+	}
+	return 1 + numberOfSubNode(node.left) + numberOfSubNode(node.right);
+    }
+
 
     //iterative method
     public BinaryNode kthSmallest(int k) {
