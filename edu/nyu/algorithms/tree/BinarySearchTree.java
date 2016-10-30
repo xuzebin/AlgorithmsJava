@@ -23,10 +23,13 @@
  * inorder2 start from minimum and iteratively calling successor method.
  * postorder
  *
+ * find kth smallest node
+ *
  **/
 package edu.nyu.algorithms.tree;
 
 import java.util.*;
+import edu.nyu.algorithms.tree.BinaryNode;
 
 public class BinarySearchTree<T> {
 
@@ -363,6 +366,25 @@ public class BinarySearchTree<T> {
 	System.out.println();
     }
 
+    public BinaryNode kthSmallest(int k) {
+	return kthSmallest(root, k, new int[]{k});
+    }
+
+    private BinaryNode kthSmallest(BinaryNode root, int k, int[] c) {
+	if (root == null) {
+	    return null;
+	}
+	BinaryNode left = kthSmallest(root.left, k, c);
+	if (left != null) {
+	    return left;
+	}
+	if (--c[0] == 0) {
+	    return root;
+	}
+	BinaryNode right = kthSmallest(root.right, k, c);
+	return right;
+    }
+
 
     public static void main(String[] args) {
 	BinarySearchTree<String> bst = new BinarySearchTree<String>();
@@ -400,6 +422,16 @@ public class BinarySearchTree<T> {
 	bst.inorderDFS();
 
 	bst.inorderDFS2();
+
+
+	Scanner in = new Scanner(System.in);
+	System.out.println("find the kth smallest node in the above binary search tree.");
+	System.out.println("please input a k...");
+	String k = in.nextLine();
+	BinaryNode node = bst.kthSmallest(Integer.parseInt(k));
+	if (node != null) {
+	    System.out.printf("the %s smallest node is [%d]='%s'%n", k, node.key, node.data);
+	}
 	
     }
 }
