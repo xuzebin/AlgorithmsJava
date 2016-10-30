@@ -19,6 +19,7 @@
  * All the above methods run in O(h) where h is the height of Tree
  *
  * preorder
+ * preorder iterative method
  * inorder recursive method
  * inorder2 start from minimum and iteratively calling successor method.
  * postorder
@@ -312,6 +313,32 @@ public class BinarySearchTree<T> {
 	preorderDFS(root);
 	System.out.println();
     }
+
+    public void preorderIterative() {
+	System.out.printf("iterative preorder: ");
+	if (root == null) {
+	    System.out.println();
+	    return;
+	}
+	Stack<BinaryNode> stack = new Stack<BinaryNode>();
+	BinaryNode p = root;
+	while (p != null) {
+	    stack.push(p);
+	    System.out.printf("%d ", p.key);
+	    p = p.left;
+	}
+	while (!stack.isEmpty()) {
+	    BinaryNode r  = stack.pop().right;
+	    while (r != null) {
+		stack.push(r);
+		System.out.printf("%d ", r.key);
+		r = r.left;
+	    }
+	}
+	System.out.println();
+    }
+
+
     public void inorderDFS() {
 	System.out.print("inorder: ");
 	inorderDFS(root);
@@ -468,9 +495,9 @@ public class BinarySearchTree<T> {
 
 
 	bst.inorderDFS();
-
 	bst.inorderDFS2();
 
+	bst.preorderIterative();
 
 	Scanner in = new Scanner(System.in);
 	System.out.println("find the kth smallest node in the above binary search tree.");
