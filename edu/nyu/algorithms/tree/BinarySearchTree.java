@@ -23,7 +23,8 @@
  * inorder2 start from minimum and iteratively calling successor method.
  * postorder
  *
- * find kth smallest node
+ * find kth smallest node (recursive)
+ * find kth smallest node (iterative)
  *
  **/
 package edu.nyu.algorithms.tree;
@@ -366,7 +367,8 @@ public class BinarySearchTree<T> {
 	System.out.println();
     }
 
-    public BinaryNode kthSmallest(int k) {
+    //recursive method
+    public BinaryNode kthSmallestRecursive(int k) {
 	return kthSmallest(root, k, new int[]{k});
     }
 
@@ -385,6 +387,30 @@ public class BinarySearchTree<T> {
 	return right;
     }
 
+    //iterative method
+    public BinaryNode kthSmallest(int k) {
+	if (root == null) {
+	    return null;
+	}
+	Stack<BinaryNode> stack = new Stack<>();
+	BinaryNode node = root;
+	while (node != null) {
+	    stack.push(node);
+	    node = node.left;
+	}
+	while (!stack.isEmpty()) {
+	    BinaryNode p = stack.pop();
+	    if (--k == 0) {
+		return p;
+	    }
+	    BinaryNode r = p.right;
+	    while (r != null) {
+		stack.push(r);
+		r = r.left;
+	    }
+	}
+	return null;
+    }
 
     public static void main(String[] args) {
 	BinarySearchTree<String> bst = new BinarySearchTree<String>();
