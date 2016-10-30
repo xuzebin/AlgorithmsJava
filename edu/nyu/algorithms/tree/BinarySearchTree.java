@@ -22,11 +22,12 @@
  * preorder iterative method
  * inorder recursive method
  * inorder2 start from minimum and iteratively calling successor method.
- * postorder
+ * postorder recursive method
+ * postorder iterative method
  *
  * find kth smallest node (2 recursive solutions)
  * find kth smallest node (iterative)
- *
+ * isValidBST check if the binary tree follows the rules of BST.
  **/
 package edu.nyu.algorithms.tree;
 
@@ -371,14 +372,6 @@ public class BinarySearchTree<T> {
 	System.out.printf("%d ", root.key);
 	inorderDFS(root.right);
     }
-    public void postorderDFS(BinaryNode<T> root) {
-	if (root == null) {
-	    return;
-	}
-	postorderDFS(root.left);
-	postorderDFS(root.right);
-	System.out.printf("%d ", root.key);
-    }
     //not using recursive algorithms
     public void inorderDFS2(BinaryNode<T> root) {
 	if (root == null) {
@@ -393,6 +386,44 @@ public class BinarySearchTree<T> {
 	}
 	System.out.println();
     }
+
+    public void postorderDFS(BinaryNode<T> root) {
+	if (root == null) {
+	    return;
+	}
+	postorderDFS(root.left);
+	postorderDFS(root.right);
+	System.out.printf("%d ", root.key);
+    }
+
+    public void postorderIterative() {
+	System.out.printf("iterative postorder: ");
+	if (root == null) {
+	    System.out.println();
+	    return;
+	}
+
+	Stack<BinaryNode> stack = new Stack<BinaryNode>();
+	List<Integer> list = new LinkedList<Integer>();
+	BinaryNode p = root;
+	stack.push(p);
+	while (!stack.isEmpty()) {
+	    BinaryNode n = stack.pop();
+	    list.add(0, n.key);
+	    if (n.left != null) {
+		stack.push(n.left);
+	    }
+	    if (n.right != null) {
+		stack.push(n.right);
+	    }
+	}
+	for (int i = 0; i < list.size(); ++i) {
+	    System.out.printf("%d ", list.get(i));
+	}
+	System.out.println();
+    }
+
+
 
     //recursive method
     public BinaryNode kthSmallestRecursive(int k) {
@@ -461,6 +492,17 @@ public class BinarySearchTree<T> {
 	return null;
     }
 
+    public boolean isValidBST() {
+	return valid(root, null, null);
+    }
+    private boolean valid(BinaryNode node, Integer min, Integer max) {
+	if (node == null) {
+	    return true;
+	}
+	return (min == null || node.key > min) && (max == null || node.key < max)
+	    && valid(node.left, min, node.key) && valid(node.right, node.key, max);
+    }
+
     public static void main(String[] args) {
 	BinarySearchTree<String> bst = new BinarySearchTree<String>();
 	
@@ -487,6 +529,7 @@ public class BinarySearchTree<T> {
 
 
 	bst.delete(4);
+	System.out.printf("node with key %d is deleted%n", 4);
 	
 	System.out.printf("maxmimum: %d%n", bst.maximum() == null ? -1 : bst.maximum().key);
 	System.out.printf("minimum: %d%n", bst.minimum() == null ? -1 : bst.minimum().key);
@@ -498,6 +541,11 @@ public class BinarySearchTree<T> {
 	bst.inorderDFS2();
 
 	bst.preorderIterative();
+	bst.postorderIterative();
+
+	boolean valid = bst.isValidBST();
+	System.out.printf("is a valid BST: %b%n", valid);
+	
 
 	Scanner in = new Scanner(System.in);
 	System.out.println("find the kth smallest node in the above binary search tree.");
