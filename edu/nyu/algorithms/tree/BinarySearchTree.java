@@ -29,6 +29,7 @@
  * find kth smallest node (iterative)
  * isValidBST check if the binary tree follows the rules of BST.
  * isBalanced check if the tree is balanced (depth difference of two subtree of every node is at most 1.
+ * convert inorder sequence to preorder sequence that is balanced.
  **/
 package edu.nyu.algorithms.tree;
 
@@ -520,6 +521,19 @@ public class BinarySearchTree<T> {
 	    return -1;
 	}
 	return Math.abs(left - right) <= 1 ? Math.max(left, right) + 1 : -1;
+    }
+
+
+    private int inorderToPreorder(int[] inorder, int i, int j, int[] preorder, int k) {
+        if (i > j || k == preorder.length) {
+            return k - 1;
+        }
+        int mid = (i + j) >> 1;
+        preorder[k] = inorder[mid];
+        System.out.printf("preorder[%d] = inorder[%d] = %d%n", k, mid, preorder[k]);
+        k = inorderToPreorder(inorder, i, mid - 1, preorder, k + 1);
+        k = inorderToPreorder(inorder, mid + 1, j, preorder, k + 1);
+        return k;
     }
 
 
