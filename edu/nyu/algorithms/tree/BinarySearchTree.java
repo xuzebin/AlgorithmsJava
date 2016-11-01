@@ -24,6 +24,7 @@
  * inorder2 start from minimum and iteratively calling successor method.
  * postorder recursive method
  * postorder iterative method
+ * breadth first search traversal
  *
  * find kth smallest node (2 recursive solutions)
  * find kth smallest node (iterative)
@@ -425,7 +426,60 @@ public class BinarySearchTree<T> {
 	System.out.println();
     }
 
+    public void bfs() {
+	System.out.printf("breadth first search traversal: ");
+	if (root == null) {
+	    System.out.println();
+	    return;
+	}
+	BinaryNode p = root;
+	Queue<BinaryNode> queue = new LinkedList<BinaryNode>();
+	queue.offer(p);
+	while (!queue.isEmpty()) {
+	    int size = queue.size();
+	    for (int i = 0; i < size; ++i) {
+		BinaryNode t = queue.poll();
+		System.out.printf("%d ", t.key);//here we only print key for simplicity.
+		if (t.left != null) {
+		    queue.offer(t.left);
+		}
+		if (t.right != null) {
+		    queue.offer(t.right);
+		}
+	    }
+	}
+	System.out.println();
+    }
 
+    public void printTree() {
+	System.out.println("BST: ");
+	if (root == null) {
+	    return;
+	}
+	TreePrinter printer = new TreePrinter(root);
+	printer.print();
+
+	System.out.println();
+    }
+    private void getNumberOfNodesEachLevel(List<Integer> list) {
+	BinaryNode p = root;
+	Queue<BinaryNode> queue = new LinkedList<BinaryNode>();
+	queue.offer(p);
+	while (!queue.isEmpty()) {
+	    int size = queue.size();
+	    list.add(size);
+	    for (int i = 0; i < size; ++i) {
+		BinaryNode t = queue.poll();
+		
+		if (t.left != null) {
+		    queue.offer(t.left);
+		}
+		if (t.right != null) {
+		    queue.offer(t.right);
+		}
+	    }
+	}
+    }
 
     //recursive method
     public BinaryNode kthSmallestRecursive(int k) {
@@ -551,6 +605,18 @@ public class BinarySearchTree<T> {
 	bst.insert(new BinaryNode<String>(9, "cv"));
 	bst.insert(new BinaryNode<String>(4, "Android"));
 	bst.insert(new BinaryNode<String>(10, "ml"));
+// 	bst.insertRecursive(new BinaryNode<String>(5, "abc"));
+// 	bst.insertRecursive(new BinaryNode<String>(3, "ok"));
+// 	bst.insertRecursive(new BinaryNode<String>(8, "java"));
+// 	bst.insertRecursive(new BinaryNode<String>(1, "c++"));
+// 	bst.insertRecursive(new BinaryNode<String>(2, "python"));
+// 	bst.insert(new BinaryNode<String>(6, "javascript"));
+// 	bst.insert(new BinaryNode<String>(7, "ruby"));
+// 	bst.insert(new BinaryNode<String>(0, "OpenGL"));
+// 	bst.insert(new BinaryNode<String>(9, "cv"));
+// 	bst.insert(new BinaryNode<String>(4, "Android"));
+
+
 
 	bst.preorderDFS();
 	bst.inorderDFS();
@@ -562,8 +628,8 @@ public class BinarySearchTree<T> {
 	System.out.printf("minimumRecursive: %d%n", bst.minimumRecursive() == null ? -1 : bst.minimumRecursive().key);
 
 
-	bst.delete(4);
-	System.out.printf("node with key %d is deleted%n", 4);
+//  	bst.delete(4);
+//  	System.out.printf("node with key %d is deleted%n", 4);
 	
 	System.out.printf("maxmimum: %d%n", bst.maximum() == null ? -1 : bst.maximum().key);
 	System.out.printf("minimum: %d%n", bst.minimum() == null ? -1 : bst.minimum().key);
@@ -576,6 +642,10 @@ public class BinarySearchTree<T> {
 
 	bst.preorderIterative();
 	bst.postorderIterative();
+
+	bst.bfs();
+
+	bst.printTree();
 
 	boolean valid = bst.isValidBST();
 	System.out.printf("Is this tree a valid BST: %b%n", valid);
