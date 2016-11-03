@@ -24,7 +24,7 @@ public class Heap {
 	int left = getLeftChild(i);
 	int right = getRightChild(i);
 
-	int largest = i;
+	int largest = i;//when HeapType is MIN, is should refer to smallest.
 	if (left < heapSize && compare(heapArray[left], heapArray[i], type)) {
 	    largest = left;
 	}

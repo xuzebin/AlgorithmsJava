@@ -12,7 +12,7 @@ package edu.nyu.algorithms;
 
 public class Queue<E> {
 
-    private class Node<E> {
+    private static class Node<E> {
 	E value;
 	Node<E> next;
 	Node(E value) {
