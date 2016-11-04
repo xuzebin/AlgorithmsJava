@@ -324,15 +324,15 @@ public class BinarySearchTree<T> {
 	    System.out.println();
 	    return;
 	}
-	Stack<BinaryNode> stack = new Stack<BinaryNode>();
-	BinaryNode p = root;
+	Stack<BinaryNode<T>> stack = new Stack<BinaryNode<T>>();
+	BinaryNode<T> p = root;
 	while (p != null) {
 	    stack.push(p);
 	    System.out.printf("%d ", p.key);
 	    p = p.left;
 	}
 	while (!stack.isEmpty()) {
-	    BinaryNode r  = stack.pop().right;
+	    BinaryNode<T> r  = stack.pop().right;
 	    while (r != null) {
 		stack.push(r);
 		System.out.printf("%d ", r.key);
@@ -406,12 +406,12 @@ public class BinarySearchTree<T> {
 	    return;
 	}
 
-	Stack<BinaryNode> stack = new Stack<BinaryNode>();
+	Stack<BinaryNode<T>> stack = new Stack<BinaryNode<T>>();
 	List<Integer> list = new LinkedList<Integer>();
-	BinaryNode p = root;
+	BinaryNode<T> p = root;
 	stack.push(p);
 	while (!stack.isEmpty()) {
-	    BinaryNode n = stack.pop();
+	    BinaryNode<T> n = stack.pop();
 	    list.add(0, n.key);
 	    if (n.left != null) {
 		stack.push(n.left);
@@ -432,13 +432,13 @@ public class BinarySearchTree<T> {
 	    System.out.println();
 	    return;
 	}
-	BinaryNode p = root;
-	Queue<BinaryNode> queue = new LinkedList<BinaryNode>();
+	BinaryNode<T> p = root;
+	Queue<BinaryNode<T>> queue = new LinkedList<BinaryNode<T>>();
 	queue.offer(p);
 	while (!queue.isEmpty()) {
 	    int size = queue.size();
 	    for (int i = 0; i < size; ++i) {
-		BinaryNode t = queue.poll();
+		BinaryNode<T> t = queue.poll();
 		System.out.printf("%d ", t.key);//here we only print key for simplicity.
 		if (t.left != null) {
 		    queue.offer(t.left);
@@ -462,14 +462,14 @@ public class BinarySearchTree<T> {
 	System.out.println();
     }
     private void getNumberOfNodesEachLevel(List<Integer> list) {
-	BinaryNode p = root;
-	Queue<BinaryNode> queue = new LinkedList<BinaryNode>();
+	BinaryNode<T> p = root;
+	Queue<BinaryNode<T>> queue = new LinkedList<BinaryNode<T>>();
 	queue.offer(p);
 	while (!queue.isEmpty()) {
 	    int size = queue.size();
 	    list.add(size);
 	    for (int i = 0; i < size; ++i) {
-		BinaryNode t = queue.poll();
+		BinaryNode<T> t = queue.poll();
 		
 		if (t.left != null) {
 		    queue.offer(t.left);
@@ -482,30 +482,30 @@ public class BinarySearchTree<T> {
     }
 
     //recursive method
-    public BinaryNode kthSmallestRecursive(int k) {
+    public BinaryNode<T> kthSmallestRecursive(int k) {
 	return kthSmallest(root, k, new int[]{k});
     }
 
-    private BinaryNode kthSmallest(BinaryNode root, int k, int[] c) {
+    private BinaryNode<T> kthSmallest(BinaryNode<T> root, int k, int[] c) {
 	if (root == null) {
 	    return null;
 	}
-	BinaryNode left = kthSmallest(root.left, k, c);
+	BinaryNode<T> left = kthSmallest(root.left, k, c);
 	if (left != null) {
 	    return left;
 	}
 	if (--c[0] == 0) {
 	    return root;
 	}
-	BinaryNode right = kthSmallest(root.right, k, c);
+	BinaryNode<T> right = kthSmallest(root.right, k, c);
 	return right;
     }
 
     //a second recursive method
-    public BinaryNode kthSmallestRecursive2(int k) {
+    public BinaryNode<T> kthSmallestRecursive2(int k) {
 	return kthSmallestRecursive2(root, k);
     }
-    private BinaryNode kthSmallestRecursive2(BinaryNode root, int k) {
+    private BinaryNode<T> kthSmallestRecursive2(BinaryNode<T> root, int k) {
 	int num = numberOfSubNode(root.left);
 	if (num + 1 == k) {
 	    return root;
@@ -515,7 +515,7 @@ public class BinarySearchTree<T> {
 	    return kthSmallestRecursive2(root.right, k - num - 1);
 	}
     }
-    private int numberOfSubNode(BinaryNode node) {
+    private int numberOfSubNode(BinaryNode<T> node) {
 	if (node == null) {
 	    return 0;
 	}
@@ -524,22 +524,22 @@ public class BinarySearchTree<T> {
 
 
     //iterative method
-    public BinaryNode kthSmallest(int k) {
+    public BinaryNode<T> kthSmallest(int k) {
 	if (root == null) {
 	    return null;
 	}
-	Stack<BinaryNode> stack = new Stack<>();
-	BinaryNode node = root;
+	Stack<BinaryNode<T>> stack = new Stack<>();
+	BinaryNode<T> node = root;
 	while (node != null) {
 	    stack.push(node);
 	    node = node.left;
 	}
 	while (!stack.isEmpty()) {
-	    BinaryNode p = stack.pop();
+	    BinaryNode<T> p = stack.pop();
 	    if (--k == 0) {
 		return p;
 	    }
-	    BinaryNode r = p.right;
+	    BinaryNode<T> r = p.right;
 	    while (r != null) {
 		stack.push(r);
 		r = r.left;
@@ -551,7 +551,7 @@ public class BinarySearchTree<T> {
     public boolean isValidBST() {
 	return valid(root, null, null);
     }
-    private boolean valid(BinaryNode node, Integer min, Integer max) {
+    private boolean valid(BinaryNode<T> node, Integer min, Integer max) {
 	if (node == null) {
 	    return true;
 	}
@@ -562,7 +562,7 @@ public class BinarySearchTree<T> {
     public boolean isBalanced() {
 	return depth(root) != -1;
     }
-    private int depth(BinaryNode node) {
+    private int depth(BinaryNode<T> node) {
 	if (node == null) {
 	    return 0;
 	}
@@ -591,6 +591,7 @@ public class BinarySearchTree<T> {
     }
 
 
+
     public static void main(String[] args) {
 	BinarySearchTree<String> bst = new BinarySearchTree<String>();
 	
@@ -605,6 +606,7 @@ public class BinarySearchTree<T> {
 	bst.insert(new BinaryNode<String>(9, "cv"));
 	bst.insert(new BinaryNode<String>(4, "Android"));
 	bst.insert(new BinaryNode<String>(10, "ml"));
+
 // 	bst.insertRecursive(new BinaryNode<String>(5, "abc"));
 // 	bst.insertRecursive(new BinaryNode<String>(3, "ok"));
 // 	bst.insertRecursive(new BinaryNode<String>(8, "java"));
@@ -615,8 +617,6 @@ public class BinarySearchTree<T> {
 // 	bst.insert(new BinaryNode<String>(0, "OpenGL"));
 // 	bst.insert(new BinaryNode<String>(9, "cv"));
 // 	bst.insert(new BinaryNode<String>(4, "Android"));
-
-
 
 	bst.preorderDFS();
 	bst.inorderDFS();
@@ -653,14 +653,18 @@ public class BinarySearchTree<T> {
 	boolean balanced = bst.isBalanced();
 	System.out.printf("Is this tree a balanced tree: %b%n", balanced); 
 
-	Scanner in = new Scanner(System.in);
-	System.out.println("find the kth smallest node in the above binary search tree.");
-	System.out.println("please input a k...");
-	String k = in.nextLine();
-	BinaryNode node = bst.kthSmallest(Integer.parseInt(k));
-	if (node != null) {
-	    System.out.printf("the %s smallest node is [%d]='%s'%n", k, node.key, node.data);
-	}
+// 	Scanner in = new Scanner(System.in);
+// 	System.out.println("find the kth smallest node in the above binary search tree.");
+// 	System.out.println("please input a k...");
+// 	String k = in.nextLine();
+// 	BinaryNode node = bst.kthSmallest(Integer.parseInt(k));
+// 	if (node != null) {
+// 	    System.out.printf("the %s smallest node is [%d]='%s'%n", k, node.key, node.data);
+// 	}
+
+	// bst.flatten();
+// 	System.out.println("flatten the tree: ");
+// 	bst.printTree();
 	
     }
 }

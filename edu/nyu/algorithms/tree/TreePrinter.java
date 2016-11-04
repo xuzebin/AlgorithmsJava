@@ -2,26 +2,26 @@ package edu.nyu.algorithms.tree;
 import java.util.*;
 
 public class TreePrinter {
-    private final BinaryNode root;
+    private final BinaryNode<?> root;//for simplicity, currently only support String type of satellite data
     private final int depth;
     private final int maxWidthOfTree;
     private final int rootNodeIndex;
     
-    private static class IndexNode {
-	BinaryNode node;
+    private class IndexNode {
+	BinaryNode<?> node;
 
 	/**
 	 * The position of the node, starting from 1 (leftmost).
 	 * The number of white spaces to print before the node is (index - 1).
 	 */
 	int index;
-	public IndexNode(BinaryNode node, int index) {
+	public IndexNode(BinaryNode<?> node, int index) {
 	    this.node = node;
 	    this.index = index;
 	}
     }
 
-    public TreePrinter(BinaryNode root) {
+    public TreePrinter(BinaryNode<?> root) {
 	this.root = root;
 	this.depth = getMaxDepth(root);
 	this.maxWidthOfTree = (int) Math.pow(2, depth) - 1;
@@ -29,7 +29,7 @@ public class TreePrinter {
     }
 
     //here we define the maximum depth of a tree the maximum number of nodes from root to leaf.
-    private int getMaxDepth(BinaryNode node) {
+    private int getMaxDepth(BinaryNode<?> node) {
 	if (node == null) {
 	    return 0;
 	}
@@ -37,7 +37,7 @@ public class TreePrinter {
     }
 
     public void print() {
-	BinaryNode p = root;
+	BinaryNode<?> p = root;
 	Queue<IndexNode> queue = new LinkedList<IndexNode>();
 	queue.offer(new IndexNode(p, this.rootNodeIndex));
 
@@ -81,11 +81,11 @@ public class TreePrinter {
 	}
     }
 
-    private void printLeftLink(final BinaryNode node) {
+    private void printLeftLink(final BinaryNode<?> node) {
 	System.out.print((node != null && node.left != null) ? "/" : " ");
     }
 
-    private void printRightLink(final BinaryNode node) {
+    private void printRightLink(final BinaryNode<?> node) {
 	System.out.print((node != null && node.right != null) ? "\\" : " ");
     }
 
