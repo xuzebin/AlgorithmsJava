@@ -20,16 +20,22 @@ public class DivideAndConquer {
 
 
 	//matrix multiplication
-	int[][] aa = {{1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {4,3,2,1}};
-	int[][] bb = {{1,2,3,4}, {5,6,7,8}, {4,3,2,1}, {8,7,6,5}};
+// 	int[][] aa = {{1,0,2,3}, {0,1,4,0}, {0,9,1,0}, {4,3,2,1}};
+// 	int[][] bb = {{1,2,3,4}, {5,6,7,8}, {4,3,2,1}, {8,7,6,5}};
+	int[][] aa = {{1,2,3,4}, {1,2,3,4}, {1,2,3,4}, {1,2,3,4}};
+	int[][] bb = {{1,2,3,4}, {1,2,3,4}, {1,2,3,4}, {1,2,3,4}};
 	int[][] cc = dac.squareMatrixMultiply(aa, bb);
 	dac.printSquareMatrix(aa);
 	System.out.println("multiply by");
 	dac.printSquareMatrix(bb);
-	System.out.println("result: ");
+	System.out.println("brute force: ");
 	dac.printSquareMatrix(cc);
-	System.out.println("result2: ");
+	System.out.println("simple divide &  conquer: ");
 	cc = dac.squareMatrixMultiplyRecursive(aa, bb);
+	dac.printSquareMatrix(cc);
+	
+	System.out.println("Strassen's algorithm: ");
+	cc = dac.strassenMethod(aa, bb);
 	dac.printSquareMatrix(cc);
     }
 
@@ -187,15 +193,24 @@ public class DivideAndConquer {
 	}
     }
     
-    public void matrixAdd(int[][] sum, int[][] a, int[][] b) {
-	if (sum == null || a == null || b == null ||
-	    sum.length != a.length || a.length != b.length || sum.length != b.length) {
+    public void matrixAdd(int[][] c, int[][] a, int[][] b) {
+	matrixAddOrSub(c, a, b, true);
+    }
+
+    //subtract
+    public void matrixSub(int[][] c, int[][] a, int[][] b) {
+	matrixAddOrSub(c, a, b, false);
+    }
+
+    private void matrixAddOrSub(int[][] c, int[][] a, int[][] b, boolean add) {
+	if (c == null || a == null || b == null ||
+	    c.length != a.length || a.length != b.length || c.length != b.length) {
 	    throw new IllegalArgumentException("Array(s) null or have unequal length");
 	}
-	int n = sum.length;
+	int n = c.length;
 	for (int i = 0; i < n; ++i) {
 	    for (int j = 0; j < n; ++j) {
-		sum[i][j] = a[i][j] + b[i][j];
+		c[i][j] = a[i][j] + b[i][j] * (add ? 1 : -1);
 	    }
 	}
     }
@@ -212,6 +227,101 @@ public class DivideAndConquer {
 	    }
 	    System.out.println("]");
 	}
+    }
+
+
+    public int[][] strassenMethod(int[][] a, int[][] b) {
+	if (a == null || a.length == 0) {
+	    throw new IllegalArgumentException("Array null or empty");
+	}
+	int n = a.length;
+	int half = n / 2;
+	int[][] c = new int[n][n];
+	if (n == 1) {
+	    c[0][0] = a[0][0] * b[0][0];
+	} else {
+	    int[][] a11 = new int[half][half];
+	    int[][] a12 = new int[half][half];
+	    int[][] a21 = new int[half][half];
+	    int[][] a22 = new int[half][half];
+	    int[][] b11 = new int[half][half];
+	    int[][] b12 = new int[half][half];
+	    int[][] b21 = new int[half][half];
+	    int[][] b22 = new int[half][half];
+	    int[][] c11 = new int[half][half];
+	    int[][] c12 = new int[half][half];
+	    int[][] c21 = new int[half][half];
+	    int[][] c22 = new int[half][half];
+	    partitionMatrix(a, a11, a12, a21, a22);
+	    partitionMatrix(b, b11, b12, b21, b22);
+	    partitionMatrix(c, c11, c12, c21, c22);
+
+
+	    int[][] s1 = new int[half][half];
+	    int[][] s2 = new int[half][half];
+	    int[][] s3 = new int[half][half];
+	    int[][] s4 = new int[half][half];
+	    int[][] s5 = new int[half][half];
+	    int[][] s6 = new int[half][half];
+	    int[][] s7 = new int[half][half];
+	    int[][] s8 = new int[half][half];
+	    int[][] s9 = new int[half][half];
+	    int[][] s10 = new int[half][half];
+	
+	    matrixSub(s1, b12, b22);
+	    matrixAdd(s2, a11, a12);
+	    matrixAdd(s3, a21, a22);
+	    matrixSub(s4, b21, b11);
+	    matrixAdd(s5, a11, a22);
+	    matrixAdd(s6, b11, b22);
+	    matrixSub(s7, a12, a22);
+	    matrixAdd(s8, b21, b22);
+	    matrixSub(s9, a11, a21);
+	    matrixAdd(s10, b11, b12);
+
+	    int[][] p1 = new int[half][half];
+	    int[][] p2 = new int[half][half];
+	    int[][] p3 = new int[half][half];
+	    int[][] p4 = new int[half][half];
+	    int[][] p5 = new int[half][half];
+	    int[][] p6 = new int[half][half];
+	    int[][] p7 = new int[half][half];
+	    p1 = strassenMethod(a11, s1);
+	    p2 = strassenMethod(s2, b22);
+	    p3 = strassenMethod(s3, b11);
+	    p4 = strassenMethod(a22, s4);
+	    p5 = strassenMethod(s5, s6);
+	    p6 = strassenMethod(s7, s8);
+	    p7 = strassenMethod(s9, s10);
+	    
+	    //c11
+	    matrixAdd(c11, p5, p4); 
+	    matrixSub(c11, c11, p2);
+	    matrixAdd(c11, c11, p6);
+
+	    matrixAdd(c12, p1, p2);//c12
+	    matrixAdd(c21, p3, p4);//c21
+
+	    //c22
+	    matrixAdd(c22, p5, p1);
+	    matrixSub(c22, c22, p3);
+	    matrixSub(c22, c22, p7);
+
+	    for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+		    if (i < half && j < half) {
+			c[i][j] = c11[i][j];
+		    } else if (i < half && j >= half) {
+			c[i][j] = c12[i][j - half];
+		    } else if (i >= half && j < half) {
+			c[i][j] = c21[i - half][j];
+		    } else {
+			c[i][j] = c22[i - half][j - half];
+		    }
+		}
+	    }
+	}
+	return c;
     }
 
 }
