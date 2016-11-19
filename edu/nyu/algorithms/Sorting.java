@@ -4,6 +4,7 @@
  * insertion sort
  * merge sort
  * quick sort
+ * selection sort (not included in the book) O(n^2)
  */
 package edu.nyu.algorithms;
 
@@ -25,6 +26,7 @@ public class Sorting {
 
 	int[] arr2 = Arrays.copyOf(arr, arr.length);
 	int[] arr3 = Arrays.copyOf(arr, arr.length);
+	int[] arr4 = Arrays.copyOf(arr, arr.length);
 	System.out.printf("unsorted: %s%n", Arrays.toString(arr));
 	int steps = s.insertionSort(arr);
 	System.out.printf("insertion sort: %s%n", Arrays.toString(arr));
@@ -38,7 +40,9 @@ public class Sorting {
 	int qsteps = s.quickSort(arr3);
 	System.out.printf("quick sort: %s%n", Arrays.toString(arr3));
 	System.out.printf("steps: %d%n", qsteps);
-	
+
+	s.selectionSort(arr4);
+	System.out.printf("selection sort: %s%n", Arrays.toString(arr4));
     }
 
     //return steps: number of calculations
@@ -152,4 +156,25 @@ public class Sorting {
 	array[j + 1] = pivot;
 	return j + 1;
     }
+
+
+    public void selectionSort(int[] array) {
+	if (array == null || array.length() == 0) {
+	    return;
+	}
+	for (int i = 0; i < array.length - 1; ++i) {
+	    int min = i;
+	    for (int j = i + 1; j < array.length; ++j) {
+		if (array[j] < array[min]) {
+		    min = j;
+		}
+	    }
+	    if (min != i) {
+		int temp = array[min];
+		array[min] = array[i];
+		array[i] = temp;
+	    }
+	}
+    }
 }
+
