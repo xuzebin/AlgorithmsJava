@@ -5,6 +5,7 @@
  * merge sort
  * quick sort
  * selection sort (not included in the book) O(n^2)
+ * bubble sort O(n^2)
  */
 package edu.nyu.algorithms;
 
@@ -27,6 +28,7 @@ public class Sorting {
 	int[] arr2 = Arrays.copyOf(arr, arr.length);
 	int[] arr3 = Arrays.copyOf(arr, arr.length);
 	int[] arr4 = Arrays.copyOf(arr, arr.length);
+	int[] arr5 = Arrays.copyOf(arr, arr.length);
 	System.out.printf("unsorted: %s%n", Arrays.toString(arr));
 	int steps = s.insertionSort(arr);
 	System.out.printf("insertion sort: %s%n", Arrays.toString(arr));
@@ -43,6 +45,9 @@ public class Sorting {
 
 	s.selectionSort(arr4);
 	System.out.printf("selection sort: %s%n", Arrays.toString(arr4));
+
+	s.bubbleSort(arr5);
+	System.out.printf("bubble sort: %s%n", Arrays.toString(arr5));
     }
 
     //return steps: number of calculations
@@ -159,7 +164,7 @@ public class Sorting {
 
 
     public void selectionSort(int[] array) {
-	if (array == null || array.length() == 0) {
+	if (array == null || array.length == 0) {
 	    return;
 	}
 	for (int i = 0; i < array.length - 1; ++i) {
@@ -173,6 +178,21 @@ public class Sorting {
 		int temp = array[min];
 		array[min] = array[i];
 		array[i] = temp;
+	    }
+	}
+    }
+
+    public void bubbleSort(int[] nums) {
+	if (nums == null || nums.length == 0) {
+	    return;
+	}
+	for (int i = 0; i < nums.length; ++i) {
+	    for (int j = 1; j < nums.length - i; ++j) {
+		if (nums[j - 1] > nums[j]) {
+		    int temp = nums[j - 1];
+		    nums[j - 1] = nums[j];
+		    nums[j] = temp;
+		}
 	    }
 	}
     }
