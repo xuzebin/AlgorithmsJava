@@ -12,8 +12,10 @@ public class AdjacencyListGraph {
 
     public static void main(String[] args) {
 	if (args == null || args.length != 2) {
-	    throw new IllegalArgumentException("Please input 2 arguments for source and destination indices");
+	    throw new IllegalArgumentException("Please input 2 arguments for source and destination indices(1 - 5)");
 	}
+
+	System.out.printf("An undirected graph:%n1------2%n|     /|\\%n|   /  | 3%n| /    |/%n5------4%n");
 
 	Map<Vertex, List<Vertex>> adjacencyLists = new HashMap<>();
 
@@ -78,12 +80,6 @@ public class AdjacencyListGraph {
     }
 
 
-    private static enum Color {
-	WHITE,
-	GRAY,
-        BLACK
-    }
-
     /**
      * @id id of each vertex for printing
      * @d distance from the source to the current Vertex
@@ -123,6 +119,12 @@ public class AdjacencyListGraph {
 	@Override public String toString() {
 	    return String.valueOf(id);
 	}
+    }
+
+    private static enum Color {
+	WHITE,
+	GRAY,
+        BLACK
     }
     
     public final Map<Vertex, List<Vertex>> adj;
