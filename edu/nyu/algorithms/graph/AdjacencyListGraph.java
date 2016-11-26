@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Graph structure represented as an adjacency list.
+ * The Graph structure represented as adjacency lists.
  */
 public class AdjacencyListGraph {
 
