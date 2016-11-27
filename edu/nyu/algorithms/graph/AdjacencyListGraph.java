@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The Graph structure represented as adjacency lists.
@@ -19,7 +20,7 @@ public class AdjacencyListGraph {
 
 	Map<Vertex, List<Vertex>> adjacencyLists = new HashMap<>();
 
-	Vertex[] vertices = initAdjacencyLists(adjacencyLists);
+	Vertex[] vertices = initAdjacencyLists2(adjacencyLists);
 	AdjacencyListGraph graph = new AdjacencyListGraph(adjacencyLists);
 	
 	int srcId = Integer.parseInt(args[0]);
@@ -30,6 +31,9 @@ public class AdjacencyListGraph {
 	Vertex dest = vertices[destId - 1];
  	System.out.printf("Path from %s to %s: %n", src, dest);
 	printPath(graph, src, dest);
+
+
+	dfs(graph);
     }
     /**
      * An undirected graph:
@@ -67,6 +71,44 @@ public class AdjacencyListGraph {
 	adjacencyLists.put(vs[4], list5);
 	return vs;
     }
+    /**
+     * The adjacency Lists of the graph:
+     * 1 -> 5
+     * 2 -> 1 -> 6
+     * 3 -> 2 -> 6
+     * 4 -> 7 -> 8
+     * 5 -> 2
+     * 6 -> 5
+     * 7 -> 3 -> 6
+     * 8 -> 4 -> 7
+     * 
+     * @adjacencyLists a hashtable that maps the vertex to its adjacency list
+     * @return array of Vertex
+     */
+    private static Vertex[] initAdjacencyLists2(Map<Vertex, List<Vertex>> adjacencyLists) {
+	Vertex[] vs = new Vertex[8];
+	for (int i = 0; i < 8; ++i) {
+	    vs[i] = new Vertex(i + 1);
+	}
+	List<Vertex> list1 = addToList(vs, 5);
+	List<Vertex> list2 = addToList(vs, 1, 6);
+	List<Vertex> list3 = addToList(vs, 2, 6);
+	List<Vertex> list4 = addToList(vs, 7, 8);
+	List<Vertex> list5 = addToList(vs, 2);
+	List<Vertex> list6 = addToList(vs, 5);
+	List<Vertex> list7 = addToList(vs, 3, 6);
+	List<Vertex> list8 = addToList(vs, 4, 7);
+
+	adjacencyLists.put(vs[0], list1);
+	adjacencyLists.put(vs[1], list2);
+	adjacencyLists.put(vs[2], list3);
+	adjacencyLists.put(vs[3], list4);
+	adjacencyLists.put(vs[4], list5);
+	adjacencyLists.put(vs[5], list6);
+	adjacencyLists.put(vs[6], list7);
+	adjacencyLists.put(vs[7], list8);
+	return vs;
+    }
 
     private static List<Vertex> addToList(Vertex[] vs, Integer ... ids) {
 	if (vs == null || vs.length == 0 || ids == null || ids.length == 0) {
@@ -82,15 +124,17 @@ public class AdjacencyListGraph {
 
     /**
      * @id id of each vertex for printing
-     * @d distance from the source to the current Vertex
+     * @d distance from the source to the current Vertex / timestamp when a vertex is discovered.
      * @color the color of the vertex
      * @p predecessor of the current Vertex
+     * @f timestamp when a vertex is finished.
      */
     private static class Vertex {
 	final int id;
 	int d;
 	Color color;
 	Vertex p;
+	int f;
 
 	public Vertex(int id) {
 	    this.id = id;
@@ -137,6 +181,12 @@ public class AdjacencyListGraph {
 	if (g == null || s == null) {
 	    throw new IllegalArgumentException("Graph object or Vertex object null");
 	}
+	Set<Vertex> vertices = g.adj.keySet();
+	for (Vertex u : vertices) {
+	    u.color = Color.WHITE;
+	    u.d = -1;
+	    u.p = null;
+	}
 	s.color = Color.GRAY;
 	s.d = 0;
 	s.p = null;
@@ -172,4 +222,43 @@ public class AdjacencyListGraph {
 	}
 	
     }
+    private static int time = 0;
+    public static void dfs(AdjacencyListGraph g) {
+	System.out.printf("DFS: ");
+	Set<Vertex> vertices = g.adj.keySet();
+	for (Vertex u : vertices) {
+	    u.color = Color.WHITE;
+	    u.p = null;
+	    u.d = -1;
+	}
+	time = 0;
+	for (Vertex u : vertices) {
+	    if (u.color == Color.WHITE) {
+		dfsVisit(g, u);
+	    }
+	}
+	System.out.printf("%n");
+    }
+    
+    private static void dfsVisit(AdjacencyListGraph g, Vertex u) {
+	time = time + 1;
+	u.d = time;
+	u.color = Color.GRAY;
+	System.out.printf("%s ", u);
+	List<Vertex> adjVertices = g.adj.get(u);
+	for (Vertex v : adjVertices) {
+	    if (v.color == Color.WHITE) {
+		v.p = u;
+		dfsVisit(g, v);
+	    }
+	}
+	u.color = Color.BLACK;
+	time = time + 1;
+	u.f = time;
+     }
+	
+
+
+
+
 }
