@@ -37,7 +37,7 @@ public class DepthFirstSearch {
 	time = time + 1;
 	u.d = time;
 	u.color = Color.GRAY;
-	System.out.printf("%s ", u);
+	System.out.printf("%s(d:%d, p:%s)  ", u, u.d, (u.p == null ? "null" : u.p));
 	List<Vertex> adjVertices = u.neighbors;
 	for (Vertex v : adjVertices) {
 	    if (v.color == Color.WHITE) {

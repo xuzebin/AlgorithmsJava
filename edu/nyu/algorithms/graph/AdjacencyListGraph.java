@@ -16,25 +16,42 @@ public class AdjacencyListGraph {
 	    throw new IllegalArgumentException("Please input 2 arguments for source and destination indices(1 - 5)");
 	}
 
-	System.out.printf("An undirected graph:%n1------2%n|     /|\\%n|   /  | 3%n| /    |/%n5------4%n");
-
 	Map<Vertex, List<Vertex>> adjacencyLists = new HashMap<>();
 
-	Vertex[] vertices = initAdjacencyLists2(adjacencyLists);
+	Vertex[] vertices = initAdjacencyLists(adjacencyLists);
 	AdjacencyListGraph graph = new AdjacencyListGraph(adjacencyLists);
+
+	Set<Vertex> vs = adjacencyLists.keySet();
+	System.out.printf("keyset size: %d%n", vs.size());
+	for (Vertex v : vs) {
+	    System.out.printf("%s", v);
+	    List<Vertex> neighbors = adjacencyLists.get(v);
+	    if (neighbors.size() > 0) {
+		System.out.printf(" -> "); 
+	    }
+	    for (int i = 0; i < neighbors.size(); ++i) {
+		if (i < neighbors.size() - 1) {
+		    System.out.printf("%s -> ", neighbors.get(i));
+		} else {
+		    System.out.printf("%s%n", neighbors.get(i));
+		}
+	    }
+
+	}
+	
 	
 	int srcId = Integer.parseInt(args[0]);
-	Vertex src = vertices[srcId - 1];
+	Vertex src = vertices[srcId];
 	bfs(graph, src);
 	
 	int destId = Integer.parseInt(args[1]);
-	Vertex dest = vertices[destId - 1];
+	Vertex dest = vertices[destId];
  	System.out.printf("Path from %s to %s: %n", src, dest);
 	printPath(graph, src, dest);
 
-
 	dfs(graph);
     }
+
     /**
      * An undirected graph:
      * 1------2
@@ -73,40 +90,39 @@ public class AdjacencyListGraph {
     }
     /**
      * The adjacency Lists of the graph:
-     * 1 -> 5
-     * 2 -> 1 -> 6
-     * 3 -> 2 -> 6
-     * 4 -> 7 -> 8
-     * 5 -> 2
-     * 6 -> 5
-     * 7 -> 3 -> 6
-     * 8 -> 4 -> 7
+     * 0 -> 1 -> 6 -> 8
+     * 1 -> 4 -> 6 -> 9
+     * 2 -> 4 -> 6
+     * 3 -> 4 -> 5 -> 8
+     * 4 -> 5 -> 9
+     * 7 -> 8 -> 9
      * 
      * @adjacencyLists a hashtable that maps the vertex to its adjacency list
      * @return array of Vertex
      */
     private static Vertex[] initAdjacencyLists2(Map<Vertex, List<Vertex>> adjacencyLists) {
-	Vertex[] vs = new Vertex[8];
-	for (int i = 0; i < 8; ++i) {
-	    vs[i] = new Vertex(i + 1);
+	Vertex[] vs = new Vertex[10];
+	for (int i = 0; i < 10; ++i) {
+	    vs[i] = new Vertex(i);
 	}
-	List<Vertex> list1 = addToList(vs, 5);
-	List<Vertex> list2 = addToList(vs, 1, 6);
-	List<Vertex> list3 = addToList(vs, 2, 6);
-	List<Vertex> list4 = addToList(vs, 7, 8);
-	List<Vertex> list5 = addToList(vs, 2);
-	List<Vertex> list6 = addToList(vs, 5);
-	List<Vertex> list7 = addToList(vs, 3, 6);
-	List<Vertex> list8 = addToList(vs, 4, 7);
+	List<Vertex> list0 = addToList(vs, 1, 6, 8);
+	List<Vertex> list1 = addToList(vs, 4, 6, 9);
+	List<Vertex> list2 = addToList(vs, 4, 6);
+	List<Vertex> list3 = addToList(vs, 4, 5, 8);
+	List<Vertex> list4 = addToList(vs, 5, 9);
+	List<Vertex> list7 = addToList(vs, 8, 9);
 
-	adjacencyLists.put(vs[0], list1);
-	adjacencyLists.put(vs[1], list2);
-	adjacencyLists.put(vs[2], list3);
-	adjacencyLists.put(vs[3], list4);
-	adjacencyLists.put(vs[4], list5);
-	adjacencyLists.put(vs[5], list6);
-	adjacencyLists.put(vs[6], list7);
-	adjacencyLists.put(vs[7], list8);
+	adjacencyLists.put(vs[0], list0);
+	adjacencyLists.put(vs[1], list1);
+	adjacencyLists.put(vs[2], list2);
+	adjacencyLists.put(vs[3], list3);
+	adjacencyLists.put(vs[4], list4);
+	adjacencyLists.put(vs[5], new ArrayList<>(0));
+	adjacencyLists.put(vs[6], new ArrayList<>(0));
+	adjacencyLists.put(vs[7], list7);
+	adjacencyLists.put(vs[8], new ArrayList<>(0));
+	adjacencyLists.put(vs[9], new ArrayList<>(0));
+
 	return vs;
     }
 
@@ -141,6 +157,7 @@ public class AdjacencyListGraph {
 	    this.d = -1;
  	    this.color = Color.WHITE;
 	    this.p = null;
+	    this.f = -1;
 	}
 
 	@Override public boolean equals(Object o) {

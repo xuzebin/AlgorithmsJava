@@ -23,7 +23,7 @@ public class BreadthFirstSearch {
 	System.out.printf("BFS: ");
 	while (!q.isEmpty()) {
 	    Vertex u = q.poll();
-	    System.out.printf("%s ", u);
+	    System.out.printf("%s(d:%d, p:%s) ", u, u.d, (u.p == null ? "null" : u.p));
 	    List<Vertex> adjVertices = u.neighbors;
 	    for (Vertex v : adjVertices) {
 		if (v.color == Color.WHITE) {

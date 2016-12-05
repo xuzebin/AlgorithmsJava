@@ -1,5 +1,5 @@
 /**
- * The color of the Vertex.
+ * The state of the Vertex.
  */
 public enum Color {
     WHITE,

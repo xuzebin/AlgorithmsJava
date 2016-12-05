@@ -1,12 +1,12 @@
 /**
  * Vertex of the graph.
  *
- * @id a name of the vertex.
- * @d distance from the source to the current Vertex / timestamp when a vertex is discovered.
- * @color the color of the vertex
- * @f timestamp when a vertex is finished.
- * @p predecessor of the current Vertex
- * @neighbors a list storing the adjacent vertices of a vertex.
+ * id is the name of the vertex.
+ * d is the  distance from the source to the current Vertex / timestamp when a vertex is discovered.
+ * color is the state of the vertex
+ * t is the timestamp when a vertex is finished.
+ * p is the predecessor of the current Vertex
+ * neighbors is a list storing the adjacent vertices of a vertex.
  */
 
 import java.util.List;
