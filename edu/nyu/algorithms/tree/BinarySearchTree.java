@@ -381,10 +381,10 @@ public class BinarySearchTree<T> {
             return;
         }
         BinaryNode<T> min = minimum(root);
-        System.out.printf("inorder2: [%d]:'%s'", min.key, min.data == null ? "null" : min.data);
+        System.out.printf("inorder2: [%d]:'%s'", min.key, min.data);
         BinaryNode<T> next = successor(min);
         while (next != null) {
-            System.out.printf(" [%d]:'%s'", next.key, next.data == null ? "null" : next.data);
+            System.out.printf(" [%d]:'%s'", next.key, next.data);
             next = successor(next);
         }
         System.out.println();
